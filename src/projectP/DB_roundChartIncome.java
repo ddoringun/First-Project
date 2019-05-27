@@ -1,32 +1,51 @@
 package projectP;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.ImageIcon;
-
-import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
-import projectP.SelectMenu;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
 
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.Calendar;
-import java.awt.event.ActionEvent;
-import java.awt.Font;
-import javax.swing.SwingConstants;
+public class DB_roundChartIncome {
 
-public class WelcomePhase {
+	String url = "jdbc:mysql://localhost:3306/wallet";
+	String user = "root";
+	String pass = "1234";
+	Connection con = null;
+	PreparedStatement ps;
+	ResultSet rs;
+	String monthS[] = { "1901", "1902", "1903", "1904", "1905", "1906", "1907", "1908", "1909", "1910", "1911",
+			"1912" };
+	double salary[] = new double[12];
 
-	JLabel l;
-
-	public WelcomePhase() {
-		JFrame f = new JFrame("메인화면");
-		f.setTitle("Welcome Phase");
-		f.getContentPane().setLayout(new BorderLayout(0, 0));
+	public DB_roundChartIncome() {
+		JFrame f = new JFrame();
+		f.setTitle("Welcome!");
+		f.setSize(752, 645);
+		JFreeChart roundChart = ChartFactory.createPieChart3D("2019 Income Chart", (PieDataset) createDataset(), true,
+				true, false);
+//				("chartTitle", "Month", "Spend / 1000", createDataset(),PlotOrientation.VERTICAL, true, true, false);
+		ChartPanel chartPanel = new ChartPanel(roundChart);
+		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367)); // 크기설정
+		f.getContentPane().add(chartPanel);
 
 		// 메뉴생성
 		JMenuBar menuBar = new JMenuBar();
@@ -51,10 +70,10 @@ public class WelcomePhase {
 			}
 		});
 		SI.add(menuItem_1);
-		
+
 		JMenu incomeC = new JMenu("수입");
 		chart.add(incomeC);
-		
+
 		JMenuItem menuItem_7 = new JMenuItem("수입 막대차트");
 		menuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -62,7 +81,7 @@ public class WelcomePhase {
 			}
 		});
 		incomeC.add(menuItem_7);
-		
+
 		JMenuItem menuItem_10 = new JMenuItem("수입 원차트");
 		menuItem_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -80,7 +99,7 @@ public class WelcomePhase {
 			}
 		});
 		spendC.add(menuItem_2);
-		
+
 		JMenuItem menuItem_9 = new JMenuItem("지출 원차트");
 		menuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -88,7 +107,6 @@ public class WelcomePhase {
 			}
 		});
 		spendC.add(menuItem_9);
-		
 
 		JMenuItem menuItem_3 = new JMenuItem("수입 조회");
 		menuItem_3.addActionListener(new ActionListener() {
@@ -97,7 +115,7 @@ public class WelcomePhase {
 			}
 		});
 		lookup.add(menuItem_3);
-		
+
 		JMenuItem menuItem_4 = new JMenuItem("지출 조회");
 		menuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,7 +131,7 @@ public class WelcomePhase {
 			}
 		});
 		chart.add(menuItem_5);
-		
+
 		JMenuItem menuItem_6 = new JMenuItem("맞춤추천");
 		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -121,7 +139,7 @@ public class WelcomePhase {
 			}
 		});
 		reco.add(menuItem_6);
-		
+
 		JMenuItem menuItem_8 = new JMenuItem("계산기");
 		menuItem_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -129,7 +147,6 @@ public class WelcomePhase {
 			}
 		});
 		cal.add(menuItem_8);
-		
 
 		menuBar.add(SI);
 		menuBar.add(chart);
@@ -140,79 +157,75 @@ public class WelcomePhase {
 		f.setJMenuBar(menuBar);
 		// 메뉴 생성 종료
 
-		ImageIcon icon = new ImageIcon("pig.jpg");
-		JLabel label = new JLabel();
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setIcon(icon);
-		f.getContentPane().add(label, BorderLayout.CENTER);
-
 		JPanel buttonP = new JPanel();
 		f.getContentPane().add(buttonP, BorderLayout.SOUTH);
-
-		JButton btnNewButton = new JButton("수입/지출 등록");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SelectMenu select = new SelectMenu();
-			}
-
-		});
-		buttonP.add(btnNewButton);
-
-		JButton btnNewButton_1 = new JButton("수입/지출 조회");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SelectLookup select = new SelectLookup();
-			}
-		});
-		buttonP.add(btnNewButton_1);
-
-		JButton btnNewButton_2 = new JButton("수입/지출 차트");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				SelectChart chart = new SelectChart();
-			}
-		});
-		buttonP.add(btnNewButton_2);
-		
-		JButton btnNewButton_3 = new JButton("추천");
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				RecommendDAO name = new RecommendDAO();
-			}
-		});
-		buttonP.add(btnNewButton_3);
-		
-		JButton btnNewButton_4 = new JButton("계산기");
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Cal cal = new Cal();
-			}
-		});
-		buttonP.add(btnNewButton_4);
-
-		JPanel panel = new JPanel();
-		f.getContentPane().add(panel, BorderLayout.NORTH);
-
-		l = new JLabel();
-		l.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 20));
-		panel.add(l);
-
-		(new time()).start();
-		f.setSize(760, 650);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setVisible(true);
 
 	}
 
-	class time extends Thread {
-		@Override
-		public void run() {
-			while (true) {
-				Calendar cal = Calendar.getInstance();
-				l.setText(cal.getTime() + "");
+	private PieDataset createDataset() {
+		final DefaultPieDataset dataset = new DefaultPieDataset();
 
+		for (int i = 0; i < 12; i++) {
+			try {
+				String driver = "com.mysql.jdbc.Driver";
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, user, pass);
+				System.out.println("연결성공");
+
+				String sql = "SELECT * FROM income WHERE date like ? and id = ?";
+
+				ps = con.prepareStatement(sql); // 전송객체를 생성해 준다.
+				ps.setString(1, monthS[i] + "%"); // % -> 뒤에 오는걸 신경X
+				ps.setString(2, Login.myId);
+				rs = ps.executeQuery(); // 전송
+
+				while (rs.next()) {
+					System.out.println(rs.getString("Date"));
+					String d1 = rs.getString("Date").substring(2, 4);
+					System.out.println(d1);
+					System.out.println(rs.getInt("income"));
+					int income = rs.getInt("income");
+
+					if (d1.equals("01")) {
+						salary[0] += income;
+					} else if (d1.equals("02")) {
+						salary[1] += income;
+					} else if (d1.equals("03")) {
+						salary[2] += income;
+					} else if (d1.equals("04")) {
+						salary[3] += income;
+					} else if (d1.equals("05")) {
+						salary[4] += income;
+					} else if (d1.equals("06")) {
+						salary[5] += income;
+					} else if (d1.equals("07")) {
+						salary[6] += income;
+					} else if (d1.equals("08")) {
+						salary[7] += income;
+					} else if (d1.equals("09")) {
+						salary[8] += income;
+					} else if (d1.equals("10")) {
+						salary[9] += income;
+					} else if (d1.equals("11")) {
+						salary[10] += income;
+					} else if (d1.equals("12")) {
+						salary[11] += income;
+					}
+
+					for (int j = 0; j < 12; j++) {
+						dataset.setValue(monthS[j].substring(2, 4), salary[j]); // 이름 + 값
+					}
+
+				}
+
+			} catch (Exception ex) {
+				System.out.println(ex.getMessage());
+				ex.printStackTrace();
 			}
 		}
 
+		return dataset;
 	}
+
 }

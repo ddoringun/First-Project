@@ -1,28 +1,27 @@
 package projectP;
 
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import java.awt.Font;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
+
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class SelectLookup {
+public class SelectChart {
 
-	public SelectLookup() {
+	public SelectChart() {
 
-		JFrame f = new JFrame("수입/지출 조회창");
-		f.setSize(486, 681);
+		JFrame f = new JFrame("수입/지출 차트 선택창");
+		f.setSize(486, 767);
 		f.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		// 메뉴생성
@@ -139,7 +138,7 @@ public class SelectLookup {
 		f.getContentPane().add(panel, BorderLayout.NORTH);
 
 		JLabel img = new JLabel("");
-		ImageIcon icon = new ImageIcon("look.jpg");
+		ImageIcon icon = new ImageIcon("ChartC.jpg");
 		img.setIcon(icon);
 		panel.add(img);
 
@@ -150,26 +149,53 @@ public class SelectLookup {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblNewLabel);
 		lblNewLabel.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 50));
+		
+		JLabel lblBar = new JLabel("막대 차트");
+		lblBar.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 38));
+		panel_1.add(lblBar);
 
 		JButton btnNewButton = new JButton("수입");
 		panel_1.add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_ChartIncome income = new DB_ChartIncome();
+			}
+
+		});
 		btnNewButton.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
 
 		JButton btnNewButton_1 = new JButton("지출");
 		panel_1.add(btnNewButton_1);
-		btnNewButton_1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LookupUserSpend look = new LookupUserSpend();
+				DB_ChartSpend spend = new DB_ChartSpend();
 			}
 		});
-		btnNewButton.addActionListener(new ActionListener() {
+		btnNewButton_1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
+		
+		JLabel label = new JLabel("원 차트");
+		label.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 38));
+		panel_1.add(label);
+		
+		JButton button = new JButton("수입");
+		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LookupUserIncom lookup = new LookupUserIncom();
+				DB_roundChartIncome name = new DB_roundChartIncome();
 			}
 		});
+		button.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
+		panel_1.add(button);
+		
+		JButton button_1 = new JButton("지출");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_roundChartSpend name = new DB_roundChartSpend();
+			}
+		});
+		button_1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
+		panel_1.add(button_1);
 
 		f.setVisible(true);
-	}
 
+	}
 }

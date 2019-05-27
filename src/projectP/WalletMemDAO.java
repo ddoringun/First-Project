@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import projectP.MemberDTO;
+import projectP.WalletMemDTO;
 
 public class WalletMemDAO {
 	String url = "jdbc:mysql://localhost:3306/wallet";
@@ -21,7 +21,7 @@ public class WalletMemDAO {
 	public ArrayList selectAll() {
 
 		ArrayList list = new ArrayList();
-		MemberDTO dto = null; 
+		WalletMemDTO dto = null; 
 		// 1. 드라이버 설정
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -42,7 +42,7 @@ public class WalletMemDAO {
 			System.out.println("4. SQL문 전송 ok!!");
 			// 5. SQL문 결과가 있으면 받아서 처리
 			while(rs.next()) { // while이 돌 때 마다 dto가 생성되고 ArrayList에 붙이게 됨
-				dto = new MemberDTO();  //기본생성자 만들어줘야함
+				dto = new WalletMemDTO();  //기본생성자 만들어줘야함
 				String id = rs.getString(2);
 				String pw = rs.getString(3);
 				String name = rs.getString(4);
@@ -119,7 +119,7 @@ public class WalletMemDAO {
 	} //end insert
 	
 	public boolean LoginCheck (String InputId, String InputPw) throws Exception {
-		MemberDTO dto = null;
+		WalletMemDTO dto = null;
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		System.out.println("1. 드라이버 설정 ok!!");

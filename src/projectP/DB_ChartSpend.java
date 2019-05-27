@@ -1,29 +1,47 @@
 package projectP;
 
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
-import java.awt.Font;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.SwingConstants;
 
-public class SelectLookup {
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
-	public SelectLookup() {
+public class DB_ChartSpend {
 
-		JFrame f = new JFrame("수입/지출 조회창");
-		f.setSize(486, 681);
-		f.getContentPane().setLayout(new BorderLayout(0, 0));
+	String url = "jdbc:mysql://localhost:3306/wallet";
+	String user = "root";
+	String pass = "1234";
+	Connection con = null;
+	PreparedStatement ps;
+	ResultSet rs;
+	int salary[] = new int[12];
+	String month[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", };
+
+	public DB_ChartSpend() {
+		JFrame f = new JFrame();
+		f.setTitle("Welcome!");
+		f.setSize(735, 603);
+		JFreeChart barChart = ChartFactory.createBarChart("Month Spend Chart", "Month", "Spend / 1000", createDataset(),
+				PlotOrientation.VERTICAL, true, true, false);
+		ChartPanel chartPanel = new ChartPanel(barChart);
+		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367)); // 크기설정
+		f.getContentPane().add(chartPanel);
 
 		// 메뉴생성
 		JMenuBar menuBar = new JMenuBar();
@@ -135,41 +153,69 @@ public class SelectLookup {
 		f.setJMenuBar(menuBar);
 		// 메뉴 생성 종료
 
-		JPanel panel = new JPanel();
-		f.getContentPane().add(panel, BorderLayout.NORTH);
-
-		JLabel img = new JLabel("");
-		ImageIcon icon = new ImageIcon("look.jpg");
-		img.setIcon(icon);
-		panel.add(img);
-
-		JPanel panel_1 = new JPanel();
-		f.getContentPane().add(panel_1, BorderLayout.CENTER);
-
-		JLabel lblNewLabel = new JLabel("메뉴를 선택하세요.");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblNewLabel);
-		lblNewLabel.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 50));
-
-		JButton btnNewButton = new JButton("수입");
-		panel_1.add(btnNewButton);
-		btnNewButton.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
-
-		JButton btnNewButton_1 = new JButton("지출");
-		panel_1.add(btnNewButton_1);
-		btnNewButton_1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LookupUserSpend look = new LookupUserSpend();
-			}
-		});
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LookupUserIncom lookup = new LookupUserIncom();
-			}
-		});
-
+		JPanel buttonP = new JPanel();
+		f.getContentPane().add(buttonP, BorderLayout.SOUTH);
 		f.setVisible(true);
+
+	}
+
+	private CategoryDataset createDataset() {
+		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		try {
+			String driver = "com.mysql.jdbc.Driver";
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, user, pass);
+			System.out.println("연결성공");
+			String sql = "SELECT * FROM spend WHERE id = ?";
+
+			ps = con.prepareStatement(sql); // 전송객체를 생성해 준다.
+			ps.setString(1, Login.myId);
+
+			rs = ps.executeQuery(); // 전송
+			while (rs.next()) {
+
+				String d1 = rs.getString("Date").substring(2, 4);
+				int spend = rs.getInt("spend");
+
+				if (d1.equals("01")) {
+					salary[0] += spend;
+				} else if (d1.equals("02")) {
+					salary[1] += spend;
+				} else if (d1.equals("03")) {
+					salary[2] += spend;
+				} else if (d1.equals("04")) {
+					salary[3] += spend;
+				} else if (d1.equals("05")) {
+					salary[4] += spend;
+				} else if (d1.equals("06")) {
+					salary[5] += spend;
+				} else if (d1.equals("07")) {
+					salary[6] += spend;
+				} else if (d1.equals("08")) {
+					salary[7] += spend;
+				} else if (d1.equals("09")) {
+					salary[8] += spend;
+				} else if (d1.equals("10")) {
+					salary[9] += spend;
+				} else if (d1.equals("11")) {
+					salary[10] += spend;
+				} else if (d1.equals("12")) {
+					salary[11] += spend;
+				}
+
+				for (int i = 0; i < 12; i++) {
+					dataset.addValue(salary[i] * 0.001, "TotalSpend", month[i]);
+				}
+
+			}
+
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			ex.printStackTrace();
+		}
+
+		return dataset;
 	}
 
 }

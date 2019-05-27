@@ -1,29 +1,36 @@
 package projectP;
 
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-import java.awt.Font;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.SwingConstants;
+public class LookupUserIncom {
 
-public class SelectLookup {
+	String url = "jdbc:mysql://localhost:3306/wallet";
+	String user = "root";
+	String password = "1234";
+	Connection con;
+	PreparedStatement ps;
+	ResultSet rs;
 
-	public SelectLookup() {
+	public LookupUserIncom() {
 
-		JFrame f = new JFrame("수입/지출 조회창");
-		f.setSize(486, 681);
-		f.getContentPane().setLayout(new BorderLayout(0, 0));
+		String title[] = { "Date", "Income", "Category", "Memo" };
+		JFrame f = new JFrame("수입 조회");
+		DefaultTableModel model = new DefaultTableModel(title, 0);
+		JTable table = new JTable(model);
+		String arr[] = { "Date", "Income", "Category", "Memo" };
+		model.addRow(arr);
 
 		// 메뉴생성
 		JMenuBar menuBar = new JMenuBar();
@@ -135,40 +142,36 @@ public class SelectLookup {
 		f.setJMenuBar(menuBar);
 		// 메뉴 생성 종료
 
-		JPanel panel = new JPanel();
-		f.getContentPane().add(panel, BorderLayout.NORTH);
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("연결 성공");
 
-		JLabel img = new JLabel("");
-		ImageIcon icon = new ImageIcon("look.jpg");
-		img.setIcon(icon);
-		panel.add(img);
+			con = DriverManager.getConnection(url, user, password);
+			System.out.println("드라이버 매니저 초기화 성공");
 
-		JPanel panel_1 = new JPanel();
-		f.getContentPane().add(panel_1, BorderLayout.CENTER);
+			String sql = "select * from income where id = ?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, Login.myId);
 
-		JLabel lblNewLabel = new JLabel("메뉴를 선택하세요.");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblNewLabel);
-		lblNewLabel.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 50));
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String date = rs.getString(2);
+				int income = rs.getInt(3);
+				String category = rs.getString(4);
+				String memo = rs.getString(5);
 
-		JButton btnNewButton = new JButton("수입");
-		panel_1.add(btnNewButton);
-		btnNewButton.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
-
-		JButton btnNewButton_1 = new JButton("지출");
-		panel_1.add(btnNewButton_1);
-		btnNewButton_1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LookupUserSpend look = new LookupUserSpend();
+				arr[0] = date;
+				arr[1] = Integer.toString(income);
+				arr[2] = category;
+				arr[3] = memo;
+				model.addRow(arr);
 			}
-		});
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LookupUserIncom lookup = new LookupUserIncom();
-			}
-		});
 
+		} catch (Exception e) {
+
+		}
+		f.add(table);
+		f.setBounds(0, 0, 900, 310);
 		f.setVisible(true);
 	}
 

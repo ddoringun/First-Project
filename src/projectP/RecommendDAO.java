@@ -65,10 +65,11 @@ public class RecommendDAO {
 
 		// 메뉴생성
 		JMenuBar menuBar = new JMenuBar();
-		JMenu SI = new JMenu("지출/수입");
+		JMenu SI = new JMenu("등록");
 		JMenu chart = new JMenu("차트");
 		JMenu lookup = new JMenu("조회");
 		JMenu reco = new JMenu("추천");
+		JMenu cal = new JMenu("기타");
 
 		JMenuItem menuItem = new JMenuItem("지출 입력");
 		menuItem.addActionListener(new ActionListener() {
@@ -86,28 +87,51 @@ public class RecommendDAO {
 		});
 		SI.add(menuItem_1);
 
-		JMenuItem menuItem_2 = new JMenuItem("지출 차트");
+		JMenu incomeC = new JMenu("수입");
+		chart.add(incomeC);
+
+		JMenuItem menuItem_7 = new JMenuItem("수입 막대차트");
+		menuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_ChartIncome chart = new DB_ChartIncome();
+			}
+		});
+		incomeC.add(menuItem_7);
+
+		JMenuItem menuItem_10 = new JMenuItem("수입 원차트");
+		menuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_roundChartIncome chart = new DB_roundChartIncome();
+			}
+		});
+		incomeC.add(menuItem_10);
+
+		JMenu spendC = new JMenu("치출");
+		chart.add(spendC);
+		JMenuItem menuItem_2 = new JMenuItem("지출 막대차트");
 		menuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DB_Chart chart = new DB_Chart();
+				DB_ChartSpend chart = new DB_ChartSpend();
 			}
 		});
-		chart.add(menuItem_2);
-		JMenuItem menuItem_5 = new JMenuItem("세대별 지출 차트");
-		menuItem_5.addActionListener(new ActionListener() {
+		spendC.add(menuItem_2);
+
+		JMenuItem menuItem_9 = new JMenuItem("지출 원차트");
+		menuItem_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DB_roundChart chart = new DB_roundChart();
+				DB_roundChartSpend chart = new DB_roundChartSpend();
 			}
 		});
-		chart.add(menuItem_5);
+		spendC.add(menuItem_9);
 
 		JMenuItem menuItem_3 = new JMenuItem("수입 조회");
 		menuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LookupUser lookup = new LookupUser();
+				LookupUserIncom lookup = new LookupUserIncom();
 			}
 		});
 		lookup.add(menuItem_3);
+
 		JMenuItem menuItem_4 = new JMenuItem("지출 조회");
 		menuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,7 +139,15 @@ public class RecommendDAO {
 			}
 		});
 		lookup.add(menuItem_4);
-		
+
+		JMenuItem menuItem_5 = new JMenuItem("월별 지출 차트");
+		menuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_roundChartSpend chart = new DB_roundChartSpend();
+			}
+		});
+		chart.add(menuItem_5);
+
 		JMenuItem menuItem_6 = new JMenuItem("맞춤추천");
 		menuItem_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -124,12 +156,23 @@ public class RecommendDAO {
 		});
 		reco.add(menuItem_6);
 
+		JMenuItem menuItem_8 = new JMenuItem("계산기");
+		menuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Cal cal = new Cal();
+			}
+		});
+		cal.add(menuItem_8);
+
 		menuBar.add(SI);
 		menuBar.add(chart);
 		menuBar.add(lookup);
 		menuBar.add(reco);
+		menuBar.add(cal);
 
 		f.setJMenuBar(menuBar);
+		// 메뉴 생성 종료
+		
 		f.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel panel = new JPanel();
@@ -185,7 +228,8 @@ public class RecommendDAO {
 			public void actionPerformed(ActionEvent e) {
 				ImageIcon icon = new ImageIcon(pic[8]);
 				img.setIcon(icon);
-				linkL.setText("<html> WebSite :  <a href =\"\">http://card-gorilla.com/sub.php?contents=submenu03&load=menu03_02_02_sk/</a></html>");
+				linkL.setText(
+						"<html> WebSite :  <a href =\"\">http://card-gorilla.com/sub.php?contents=submenu03&load=menu03_02_02_sk/</a></html>");
 				U = "http://card-gorilla.com/sub.php?contents=submenu03&load=menu03_02_02_sk";
 				linkL.setCursor(new Cursor(Cursor.HAND_CURSOR));
 				goWeb(linkL, U);

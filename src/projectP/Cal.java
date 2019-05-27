@@ -1,29 +1,94 @@
 package projectP;
 
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
-import java.awt.Font;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.SwingConstants;
+import java.awt.Color;
 
-public class SelectLookup {
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.GridLayout;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-	public SelectLookup() {
+public class Cal extends JFrame implements ActionListener {
+	JTextField T1, T2;
+	int j = 0;
+	int prevnum, temp, result;
+	String tempFun, tempInput = "";
+	boolean finish = false;
+	JButton Button[] = new JButton[16];
 
-		JFrame f = new JFrame("수입/지출 조회창");
-		f.setSize(486, 681);
-		f.getContentPane().setLayout(new BorderLayout(0, 0));
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		String input = e.getActionCommand();
+
+		if (input.equals("+")) {
+			prevnum = temp;
+			tempFun = "+";
+			tempInput = "";
+			T2.setText("덧셈");
+		} else if (input.equals("-")) {
+			prevnum = temp;
+			tempFun = "-";
+			tempInput = "";
+			T2.setText("뺄셈");
+		} else if (input.equals("*")) {
+			prevnum = temp;
+			tempFun = "*";
+			tempInput = "";
+			T2.setText("곱셈");
+		} else if (input.equals("/")) {
+			prevnum = temp;
+			tempFun = "/";
+			tempInput = "";
+			T2.setText("나눗셈");
+		} else if (input.equals("C")) {
+			tempInput = "";
+			temp = 0;
+			prevnum = 0;
+			T1.setText("");
+			T2.setText("지움");
+		} else if (input.equals("=")) {
+			if (tempFun.equals("+")) {
+				result = prevnum + temp;
+				T1.setText(String.valueOf(result));
+				finish = true;
+			} else if (tempFun.equals("-")) {
+				result = prevnum - temp;
+				T1.setText(String.valueOf(result));
+				finish = true;
+			} else if (tempFun.equals("*")) {
+				result = prevnum * temp;
+				T1.setText(String.valueOf(result));
+				finish = true;
+			} else if (tempFun.equals("/")) {
+				result = prevnum / temp;
+				T1.setText(String.valueOf(result));
+				finish = true;
+			}
+
+		} else {
+			if (finish == true) {
+				T1.setText("0");
+				finish = false;
+				temp = 0;
+				prevnum = 0;
+				tempInput = "";
+			}
+			tempInput += e.getActionCommand();
+			System.out.println(tempInput);
+			T1.setText(tempInput);
+			temp = Integer.parseInt(tempInput);
+		}
+	}
+
+	public Cal() {
 
 		// 메뉴생성
 		JMenuBar menuBar = new JMenuBar();
@@ -132,44 +197,36 @@ public class SelectLookup {
 		menuBar.add(reco);
 		menuBar.add(cal);
 
-		f.setJMenuBar(menuBar);
+		setJMenuBar(menuBar);
 		// 메뉴 생성 종료
 
-		JPanel panel = new JPanel();
-		f.getContentPane().add(panel, BorderLayout.NORTH);
+		getContentPane().setLayout(new BorderLayout());
+		setSize(545, 636);
+		T1 = new JTextField("", 20);
+		T1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 20));
+		T2 = new JTextField("", 5);
+		T2.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 16));
+		T2.setForeground(Color.BLACK);
+		T2.setEnabled(false);
 
-		JLabel img = new JLabel("");
-		ImageIcon icon = new ImageIcon("look.jpg");
-		img.setIcon(icon);
-		panel.add(img);
+		JPanel P1 = new JPanel();
+		JPanel P2 = new JPanel();
+		P1.add(T1);
+		P1.add(T2);
+		P2.setLayout(new GridLayout(4, 4, 10, 10));
+		String btnVal[] = { "1", "2", "3", "*", "4", "5", "6", "/", "7", "8", "9", "+", "C", "0", "=", "-", };
 
-		JPanel panel_1 = new JPanel();
-		f.getContentPane().add(panel_1, BorderLayout.CENTER);
+		for (int i = 0; i <= 15; i++) {
+			Button[i] = new JButton(btnVal[i]);
+			P2.add(Button[i]);
+			Button[i].addActionListener(this);
+			Button[i].setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
+			Button[i].setForeground(Color.black);
+		}
 
-		JLabel lblNewLabel = new JLabel("메뉴를 선택하세요.");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblNewLabel);
-		lblNewLabel.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 50));
-
-		JButton btnNewButton = new JButton("수입");
-		panel_1.add(btnNewButton);
-		btnNewButton.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
-
-		JButton btnNewButton_1 = new JButton("지출");
-		panel_1.add(btnNewButton_1);
-		btnNewButton_1.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 35));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LookupUserSpend look = new LookupUserSpend();
-			}
-		});
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LookupUserIncom lookup = new LookupUserIncom();
-			}
-		});
-
-		f.setVisible(true);
+		getContentPane().add(P1, BorderLayout.NORTH);
+		getContentPane().add(P2, BorderLayout.CENTER);
+		setVisible(true);
 	}
 
 }

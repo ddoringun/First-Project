@@ -25,7 +25,7 @@ public class SignUp {
 
 	public SignUp() {
 		JFrame f = new JFrame();
-		f.setSize(461, 851);
+		f.setSize(461, 860);
 
 		JButton btnNewButton = new JButton("회원등록");
 		btnNewButton.addActionListener(new ActionListener() {

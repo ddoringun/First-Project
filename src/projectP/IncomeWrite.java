@@ -36,10 +36,11 @@ public class IncomeWrite {
 
 		// 메뉴생성
 		JMenuBar menuBar = new JMenuBar();
-		JMenu SI = new JMenu("지출/수입");
+		JMenu SI = new JMenu("등록");
 		JMenu chart = new JMenu("차트");
 		JMenu lookup = new JMenu("조회");
 		JMenu reco = new JMenu("추천");
+		JMenu cal = new JMenu("기타");
 
 		JMenuItem menuItem = new JMenuItem("지출 입력");
 		menuItem.addActionListener(new ActionListener() {
@@ -57,21 +58,51 @@ public class IncomeWrite {
 		});
 		SI.add(menuItem_1);
 
-		JMenuItem menuItem_2 = new JMenuItem("지출 차트");
-		menuItem_2.addActionListener(new ActionListener() {
+		JMenu incomeC = new JMenu("수입");
+		chart.add(incomeC);
+
+		JMenuItem menuItem_7 = new JMenuItem("수입 막대차트");
+		menuItem_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DB_Chart chart = new DB_Chart();
+				DB_ChartIncome chart = new DB_ChartIncome();
 			}
 		});
-		chart.add(menuItem_2);
+		incomeC.add(menuItem_7);
+
+		JMenuItem menuItem_10 = new JMenuItem("수입 원차트");
+		menuItem_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_roundChartIncome chart = new DB_roundChartIncome();
+			}
+		});
+		incomeC.add(menuItem_10);
+
+		JMenu spendC = new JMenu("치출");
+		chart.add(spendC);
+		JMenuItem menuItem_2 = new JMenuItem("지출 막대차트");
+		menuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_ChartSpend chart = new DB_ChartSpend();
+			}
+		});
+		spendC.add(menuItem_2);
+
+		JMenuItem menuItem_9 = new JMenuItem("지출 원차트");
+		menuItem_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_roundChartSpend chart = new DB_roundChartSpend();
+			}
+		});
+		spendC.add(menuItem_9);
 
 		JMenuItem menuItem_3 = new JMenuItem("수입 조회");
 		menuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LookupUser lookup = new LookupUser();
+				LookupUserIncom lookup = new LookupUserIncom();
 			}
 		});
 		lookup.add(menuItem_3);
+
 		JMenuItem menuItem_4 = new JMenuItem("지출 조회");
 		menuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -79,6 +110,14 @@ public class IncomeWrite {
 			}
 		});
 		lookup.add(menuItem_4);
+
+		JMenuItem menuItem_5 = new JMenuItem("월별 지출 차트");
+		menuItem_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DB_roundChartSpend chart = new DB_roundChartSpend();
+			}
+		});
+		chart.add(menuItem_5);
 
 		JMenuItem menuItem_6 = new JMenuItem("맞춤추천");
 		menuItem_6.addActionListener(new ActionListener() {
@@ -88,10 +127,19 @@ public class IncomeWrite {
 		});
 		reco.add(menuItem_6);
 
+		JMenuItem menuItem_8 = new JMenuItem("계산기");
+		menuItem_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Cal cal = new Cal();
+			}
+		});
+		cal.add(menuItem_8);
+
 		menuBar.add(SI);
 		menuBar.add(chart);
 		menuBar.add(lookup);
 		menuBar.add(reco);
+		menuBar.add(cal);
 
 		f.setJMenuBar(menuBar);
 		// 메뉴 생성 종료
@@ -142,11 +190,11 @@ public class IncomeWrite {
 		panel_1.add(memoT);
 		memoT.setFont(new Font("나눔고딕 ExtraBold", Font.PLAIN, 30));
 		memoT.setColumns(10);
-		String test = (String) combobox.getSelectedItem();
 
 		JButton btnNewButton = new JButton("등록");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String test = (String) combobox.getSelectedItem();
 				IncomeDAO dao = new IncomeDAO();
 				IncomeDTO dto = new IncomeDTO();
 				String InputDate = dateT.getText();
